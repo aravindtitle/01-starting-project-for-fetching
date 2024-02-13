@@ -8,6 +8,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [retryIntervalId, setRetryIntervalId] = useState(null);
+  const [newMovie, setNewMovie] = useState({
+    title: "",
+    openingText: "",
+    releaseDate: "",
+  });
 
   const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
@@ -49,6 +54,31 @@ function App() {
     fetchMoviesHandler();
   }, [fetchMoviesHandler]);
 
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const updatedMovies = [
+      ...movies,
+      {
+        id: Math.random().toString(),
+        ...newMovie,
+      },
+    ];
+    setMovies(updatedMovies);
+    setNewMovie({
+      title: "",
+      openingText: "",
+      releaseDate: "",
+    });
+  };
+
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
+    setNewMovie((prevMovie) => ({
+      ...prevMovie,
+      [name]: value,
+    }));
+  };
+
   let content = <p>Found no movies.</p>;
 
   if (movies.length > 0) {
@@ -71,6 +101,40 @@ function App() {
 
   return (
     <React.Fragment>
+      <section>
+        <form onSubmit={submitHandler}>
+          <div>
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={newMovie.title}
+              onChange={changeHandler}
+            />
+          </div>
+          <div>
+            <label htmlFor="openingText">Opening Text</label>
+            <textarea
+              id="openingText"
+              name="openingText"
+              value={newMovie.openingText}
+              onChange={changeHandler}
+            />
+          </div>
+          <div>
+            <label htmlFor="releaseDate">Release Date</label>
+            <input
+              type="text"
+              id="releaseDate"
+              name="releaseDate"
+              value={newMovie.releaseDate}
+              onChange={changeHandler}
+            />
+          </div>
+          <button type="submit">Add Movie</button>
+        </form>
+      </section>
       <section>{content}</section>
     </React.Fragment>
   );
