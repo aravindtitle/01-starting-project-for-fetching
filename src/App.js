@@ -71,6 +71,12 @@ function App() {
     });
   };
 
+  const deleteMovieHandler = (movieId) => {
+    setMovies((prevMovies) =>
+      prevMovies.filter((movie) => movie.id !== movieId)
+    );
+  };
+
   const changeHandler = (event) => {
     const { name, value } = event.target;
     setNewMovie((prevMovie) => ({
@@ -82,7 +88,7 @@ function App() {
   let content = <p>Found no movies.</p>;
 
   if (movies.length > 0) {
-    content = <MoviesList movies={movies} />;
+    content = <MoviesList movies={movies} onDeleteMovie={deleteMovieHandler} />;
   }
 
   if (error) {
