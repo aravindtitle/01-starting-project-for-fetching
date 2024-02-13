@@ -38,16 +38,16 @@ function App() {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, [fetchMoviesHandler]);
-
-  const cancelRetryHandler = () => {
+  const cancelRetryHandler = useCallback(() => {
     if (retryIntervalId) {
       clearInterval(retryIntervalId);
       setRetryIntervalId(null);
     }
-  };
+  }, [retryIntervalId]);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   let content = <p>Found no movies.</p>;
 
@@ -71,9 +71,6 @@ function App() {
 
   return (
     <React.Fragment>
-      <section>
-        <button onClick={fetchMoviesHandler}>Fetch Movies</button>
-      </section>
       <section>{content}</section>
     </React.Fragment>
   );
